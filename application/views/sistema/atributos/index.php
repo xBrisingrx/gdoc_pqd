@@ -190,7 +190,7 @@
 				  <div class="form-group row">
 				    <label class="col-sm-2">Fecha inicio vigencia(*)</label>
 				    <div class="col-9 input-group g-brd-primary--focus">
-				      <input id="fecha_inicio_vigencia" name="fecha_inicio_vigencia" class="form-control form-control-md  rounded-0 col-sm-6" type="date" required>
+				      <input id="fecha_inicio_vigencia" name="fecha_inicio_vigencia" class="form-control form-control-md  rounded-0 col-sm-6" type="date">
 				    </div>
 				  </div>
 				  <!-- End Select Single Date -->

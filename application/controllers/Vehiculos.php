@@ -67,27 +67,42 @@ class Vehiculos extends CI_Controller {
         'user_last_updated_id' => $this->session->userdata('id')
       );
       $vehiculo = $this->security->xss_clean($vehiculo);
-      if ($this->Vehiculo_model->insert_entry('vehiculos', $vehiculo)) {
-        $tabla_id = $this->Vehiculo_model->get_last_id();
-        if ( !empty( $_FILES['imagenes']['name'][0] ) ) {
-          $msg_images = $this->Fileutil->subir_multiples_archivos( $_FILES['imagenes'], 'vehiculos', 'vehiculos', $tabla_id, 'imagenes' );
+      $response = [];
+      $this->db->trans_begin();
+        if ($this->Vehiculo_model->insert_entry('vehiculos', $vehiculo)) {
+          $response = array( 'status' => 'success', 'msg' => 'Vehiculo creado' );
+          $tabla_id = $this->Vehiculo_model->get_last_id();
+          if ( !empty( $_FILES['imagenes']['name'][0] ) ) {
+            $estado_archivos = $this->Fileutil->subir_multiples_archivos( $_FILES['imagenes'], 'vehiculos/img', 'vehiculos', $tabla_id, 'imagenes' );
+
+            if ($estado_archivos['status'] === TRUE) {
+              $response =  array( 'status' => 'success', 'msg' => 'Carga exitosa');
+            } else {
+              $response =  array( 'status' => 'error', 'msg' => $estado_archivos['error_msg'] );
+            }
+          }
+          // if ( !empty( $this->input->post('asignacion') ) ) {
+          //   $entry = array( 
+          //     'vehiculo_id' => $last_id,
+          //     'asignacion_id' => $this->input->post('asignacion'),
+          //     'fecha_alta' => $this->input->post('fecha_alta_asignacion'),
+          //     'created_at' => date('Y-m-d H:i:s'),
+          //     'updated_at' => date('Y-m-d H:i:s'),
+          //     'user_created_id' => $this->session->userdata('id'),
+          //     'user_last_updated_id' => $this->session->userdata('id'));
+          //   $this->DButil->insert_entry( 'vehiculos_asignaciones', $entry );
+          // }
+        } else {
+          $this->session->set_flashdata('errors', 'No se pudo registrar el vehiculo.');
+          $response = array( 'status' => 'error', 'msg' => 'Ocurrio un error al registrar el vehiculo' );
         }
-        if ( !empty( $this->input->post('asignacion') ) ) {
-          $entry = array( 
-            'vehiculo_id' => $last_id,
-            'asignacion_id' => $this->input->post('asignacion'),
-            'fecha_alta' => $this->input->post('fecha_alta_asignacion'),
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-            'user_created_id' => $this->session->userdata('id'),
-            'user_last_updated_id' => $this->session->userdata('id'));
-          $this->DButil->insert_entry( 'vehiculos_asignaciones', $entry );
-        }
-        echo json_encode( array( 'status' => 'success', 'msg' => 'Vehiculo creado' ) );
-      } else {
-        $this->session->set_flashdata('errors', 'No se pudo registrar el vehiculo.');
-        echo json_encode( array( 'status' => 'error', 'msg' => 'Ocurrio un error al registrar el vehiculo' ) );
+      if ( ($this->db->trans_status() === FALSE) || ( $response['status'] == 'error' ) ) {
+        $this->db->trans_rollback();
       }
+      else {
+        $this->db->trans_commit();
+      }
+      echo json_encode( $response );
     }
   }
 
@@ -253,7 +268,8 @@ class Vehiculos extends CI_Controller {
   }
 
   function get_imagenes($id) {
-      echo json_encode( $this->DButil->get('archivos', array('tabla' => 'vehiculos', 'tabla_id' => $id, 'activo' => true)) );
+      echo json_encode( $this->DButil->get('archivos', array('tabla' => 'vehiculos', 
+        'tabla_id' => $id, 'activo' => true)) );
   }
 
   function _validate_rules($edit = null){
