@@ -145,7 +145,7 @@ class Atributos extends CI_Controller {
 			$row[] = ($a->permite_pdf) ? 'Si' : 'No';
 			$row[] = $a->observaciones;
 			$row[] = $a->metodologia_renovacion;
-			$row[] = date('d-m-Y', strtotime($a->fecha_inicio_vigencia));
+			$row[] = ($a->fecha_inicio_vigencia != '0000-00-00') ? date('d-m-Y', strtotime($a->fecha_inicio_vigencia)) : '';
 			$row[] = ($a->presenta_resumen_mensual) ? 'Si' : 'No';
 			$row[] = (!$a->activo) ? $a->update_at : ' ';
 			if ($this->session->userdata('rol') == 1) {
