@@ -13,7 +13,7 @@ class Migrate extends CI_Controller
     }
   }
 
-  function add_admin(){
+  function data_default(){
     $usuario = array(
           'nombre'=> 'mssi',
           'email'    => 'soporte@maurosampaoli.com.ar',
@@ -23,7 +23,7 @@ class Migrate extends CI_Controller
           'created_at' => date('Y-m-d H:i:s'),
           'updated_at' => date('Y-m-d H:i:s'),
         );
-    if ($this->Usuario_model->insert_entry($usuario)) {
+    if ($this->DButil->insert_entry('usuarios',$usuario)) {
       echo "Exito";
     } else {
       echo ":(";

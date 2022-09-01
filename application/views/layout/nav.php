@@ -68,7 +68,7 @@
                       <a href="<?php echo base_url('Atributos/dependencias_atributos/1');?>">Dependencia de atributos</a>
                     </li> -->
                     <li>
-                      <a href="<?php echo base_url('Empresas/administrar/1');?>">Admin de empresas</a>
+                      <!-- <a href="<?php echo base_url('Empresas/administrar/1');?>">Admin de empresas</a> -->
                     </li>
                     <li>
                       <a href="<?php echo base_url('Motivos_baja/administrar/1');?>">Admin motivos baja</a>
@@ -110,7 +110,7 @@
                       <a href="<?php echo base_url('Atributos/dependencias_atributos/2');?>">Dependencia de atributos</a>
                     </li> -->
                     <li>
-                      <a href="<?php echo base_url('Empresas/administrar/2');?>">Admin de empresas</a>
+                      <!-- <a href="<?php echo base_url('Empresas/administrar/2');?>">Admin de empresas</a> -->
                     </li>
                     <li>
                       <a href="<?php echo base_url('Motivos_baja/administrar/2');?>">Admin motivos baja</a>
