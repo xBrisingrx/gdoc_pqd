@@ -5,7 +5,7 @@
     <a href="<?php echo base_url('Vehiculos/new');?>" class="btn btn-success mb-2">Nuevo vehiculo</a>
   <?php endif ?>
   <a href="<?php echo base_url('Vehiculos_Inactivos');?>" class="btn btn-info mb-2">Ver vehiculos inactivo</a>
-  <button type="button" class="btn btn-primary justify-content-start mb-2" data-toggle="modal" data-target="#modal_excel" > Exportar a excel </button>
+  <!-- <button type="button" class="btn btn-primary justify-content-start mb-2" data-toggle="modal" data-target="#modal_excel" > Exportar a excel </button> -->
 
   <div class="card g-brd-darkpurple rounded-0 g-mb-30">
     <h3 class="card-header g-bg-darkpurple g-brd-transparent g-color-white g-font-size-16 rounded-0 mb-2">

@@ -91,7 +91,7 @@ class Fileutil_model extends CI_Model {
     $path = "assets/uploads/$folder/".date('Y').'/'.date('m').'/'.$tabla_id;
     if ( !file_exists( $path ) ) {
       if (!mkdir( $path, 0777, true )) {
-        $response['error_msg'] = 'se creo la carpeta';
+        $response['error_msg'] = 'No se creo la carpeta';
         $response['status'] = FALSE;
         return $response;
       }
@@ -134,8 +134,8 @@ class Fileutil_model extends CI_Model {
     } else {
       $response['error_msg'] = 'Error al registrar archivo en BD';
       $response['status'] = FALSE;
-      return $response;
     }
+    return $response;
   }
 
   function actualizar_archivo( $archivo_id, $file ) {
@@ -166,12 +166,14 @@ class Fileutil_model extends CI_Model {
         return $response;
       } else {
         $response['archivos'] = array( 'id' => $this->DButil->get_last_id('archivos'), 'path' => $archivo->path );
+        $response['error_msg'] = '';
+        $response['status'] = TRUE;
       }
      }else {
       $response['error_msg'] = 'Error al registrar archivo en BD';
       $response['status'] = FALSE;
-      return $response;
     }
+    return $response;
   }
 
   function mover_archivos($files, $folder, $tabla, $tabla_id, $columna){
