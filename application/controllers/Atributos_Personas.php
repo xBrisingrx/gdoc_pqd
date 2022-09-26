@@ -45,7 +45,7 @@ class Atributos_Personas extends CI_Controller {
 	}
 
 	function existe($persona_id, $atributo_id){
-		if( $this->Atributos_Personas_model->existe( $atributo_id, $persona_id ) ){
+		if( $this->Atributos_Personas_model->existe($persona_id, $atributo_id ) ){
 			$entry = $this->Atributos_Personas_model->get_atributo_persona($persona_id, $atributo_id);
 			return $entry->activo;
 		} else {

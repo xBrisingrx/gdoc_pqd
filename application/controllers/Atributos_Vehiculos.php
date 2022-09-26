@@ -25,7 +25,7 @@ class Atributos_Vehiculos extends CI_Controller {
 			'cargado' => false
 		);
 		$entry = $this->security->xss_clean($entry);
-		if ( !$this->existe($entry['vehiculo_id'], $entry['atributo_id']) ) {
+		if ( !$this->existe($entry['atributo_id'], $entry['vehiculo_id']) ) {
 			if ($this->Atributos_Vehiculos_model->insert_personalizado($entry)) {
 				echo json_encode( array('status' => 'success', 'msg' => 'Atributo asignado') );
 			} else {
@@ -44,7 +44,7 @@ class Atributos_Vehiculos extends CI_Controller {
 		}
 	}
 
-	function existe($vehiculo_id, $atributo_id){
+	function existe($atributo_id, $vehiculo_id){
 		if( $this->Atributos_Vehiculos_model->exists( $atributo_id, $vehiculo_id ) ){
 			$entry = $this->Atributos_Vehiculos_model->get_atributo_vehiculo($vehiculo_id, $atributo_id);
 			return $entry->activo;
