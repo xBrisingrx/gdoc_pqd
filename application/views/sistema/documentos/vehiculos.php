@@ -277,6 +277,12 @@
     $('#modal_seguros_vehiculo').modal('show')
   }
 
+  function modal_destroy_aseguradora(seguro_vehiculo_id){
+    clean_form('form_eliminar_seguro_vehiculo')
+    document.querySelector('#form_eliminar_seguro_vehiculo #seguro_vehiculo_id').value = seguro_vehiculo_id
+    $('#modal_eliminar_seguro_vehiculo').modal('show')
+  }
+
   document.getElementById('form_seguro_vehiculo').addEventListener('submit', function(e) {
     e.preventDefault()
     let form_data = new FormData()
@@ -344,6 +350,25 @@
         }
       })
       .catch(console.log)
+  })
+
+  document.getElementById('form_eliminar_seguro_vehiculo').addEventListener('submit', (e) => {
+    e.preventDefault()
+    // let form_data = new FormData()
+    // form_data.append("id", parseInt( document.querySelector('#form_eliminar_seguro_vehiculo #seguro_vehiculo_id').value ) )
+    const seguro_vehiculo_id = parseInt( document.querySelector('#form_eliminar_seguro_vehiculo #seguro_vehiculo_id').value )
+    fetch( `${base_url}Seguros_Vehiculos/destroy/${seguro_vehiculo_id}`, {
+      method: 'DELETE'
+    })
+    .then(response => response.json() )
+    .then(response => {
+      if (response.status === 'success') {
+        $('#modal_eliminar_seguro_vehiculo').modal('hide')
+          tabla_seguros_vehiculo.ajax.reload(null,false)
+      }
+      noty_alert( response.status , response.msg )
+    })
+    .catch(error => console.log('error: ' + error))
   })
 
   function modal_asignaciones_vehiculos() {

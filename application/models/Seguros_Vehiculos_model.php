@@ -20,17 +20,22 @@ class Seguros_Vehiculos_model extends CI_Model {
     return $this->db->get()->result();
   }
 
-  function insert_entry($attribute) {
-    return $this->db->insert($this->table, $attribute);
+  function insert_entry($seguro_vehiculo) {
+    return $this->db->insert($this->table, $seguro_vehiculo);
   }
 
-  function update_entry($id, $perfil) {
+  function update_entry($id, $seguro_vehiculo) {
     $this->db->where('id', $id);
-    return $this->db->update($this->table, $perfil);
+    return $this->db->update($this->table, $seguro_vehiculo);
   }
 
-  function destroy($id){
-
+  function destroy_entry($id){
+    $entry = $this->db->get_where($this->table, array('id'=>$id))->row();
+    $entry->activo = false;
+    $entry->updated_at = date('Y-m-d H:i:s');
+    $entry->user_last_updated_id = $this->session->userdata('id');
+    $this->db->where('id', $id);
+    return $this->db->update($this->table, $entry);
   }
 
   function existe( $name, $tipo, $atributo_id = null ) {

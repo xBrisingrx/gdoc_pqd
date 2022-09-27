@@ -108,8 +108,8 @@ class Seguros_Vehiculos extends CI_Controller {
 	}
 
 	function destroy($id){
-		if ($this->DButil->destroy_entry('aseguradoras', $id)) {
-			echo json_encode(array('status' => 'success', 'msg' => 'Aseguradora eliminada' )); 
+		if ($this->Seguros_Vehiculos_model->destroy_entry($id)) {
+			echo json_encode(array('status' => 'success', 'msg' => 'Aseguradora eliminada => '.$id )); 
 		} else {
 			echo json_encode(array('status' => 'error', 'msg' => 'No se pudo eliminar la aseguradora' )); 
 		}

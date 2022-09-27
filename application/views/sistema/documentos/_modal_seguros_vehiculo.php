@@ -85,7 +85,7 @@
 </div>
 
 <!-- modal eliminar renovacion -->
-<div class="modal fade" id="modal_eliminar_renovacion" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="modal_eliminar_seguro_vehiculo" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -98,7 +98,7 @@
         <p>Confirma que quiere eliminar el seguro al vehiculo?</p>
         <!-- Si el cargar el formulario retorna errores los imprimo en este div -->
         <div id="msg-errors"></div>
-        <?php echo form_open('', array('id' => 'form_eliminar_renovacion' )) ?>
+        <?php echo form_open('', array('id' => 'form_eliminar_seguro_vehiculo' )) ?>
           <!-- input con el id del atributo_persona -->
           <input type="hidden" id="seguro_vehiculo_id" value="">         
           <button id="btnEliminarSeguro" type="submit" class="btn btn-primary">Eliminar</button>
