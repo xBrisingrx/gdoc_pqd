@@ -1,9 +1,9 @@
 <section class="container g-py-10">
-  <h1>Informes de personal</h1>
+  <h1>Informes de vencimientos de vehículos</h1>
 
   <h3>Seleccione el informe que desea descargar</h3>
 
-  <a href="<?php echo base_url('Informes/informe_matriz_vehiculos') ?>" class="btn btn-md u-btn-indigo g-mr-10 g-mb-15">Informe matriz de vehiculos</a>
+  <a href="<?php echo base_url('Informes/informe_matriz_vehiculos') ?>" class="btn btn-md u-btn-indigo g-mr-10 g-mb-15">Vencimientos de vehículos</a>
 
   <!-- form entre fechas -->
   <form id="form_informe_vehiculos_entre_fechas" action="<?php echo base_url('Informes/informe_matriz_vehiculos') ?>" class="g-brd-around g-brd-gray-light-v4 g-pa-30 g-mb-30" method="GET">

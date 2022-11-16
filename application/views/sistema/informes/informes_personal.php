@@ -1,9 +1,9 @@
 <section class="container g-py-10">
-  <h1>Informes de personal</h1>
+  <h1>Informes de vencimientos de personal</h1>
 
   <h3>Seleccione el informe que desea descargar</h3>
 
-  <a href="<?php echo base_url('Informes/informe_matriz') ?>" class="btn btn-md u-btn-primary g-mr-10 g-mb-15">Informe matriz de personas</a>
+  <a href="<?php echo base_url('Informes/informe_matriz') ?>" class="btn btn-md u-btn-primary g-mr-10 g-mb-15"> Vencimiento de todas las personas</a>
   <!-- form entre fechas -->
   <form id="form_informe_entre_fechas" action="<?php echo base_url('Informes/informe_matriz') ?>" class="g-brd-around g-brd-gray-light-v4 g-pa-30 g-mb-30" method="GET">
     <div class="row g-mb-10">
