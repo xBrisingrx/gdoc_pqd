@@ -304,6 +304,7 @@ class Informes extends CI_Controller {
         $row = $this->obtener_fecha_vencimiento($row, $data[$i]);
       } elseif ( $id_anterior != $data[$i]->id ) {
         $datos_informe[] = $row;
+        $row = $cuerpo_array;
         $id_anterior = $data[$i]->id;
         $row['legajo'] = $data[$i]->n_legajo;
         $row['nombre_completo'] = $data[$i]->apellido_persona.' '.$data[$i]->nombre_persona.' '.$data[$i]->dni;
@@ -317,7 +318,6 @@ class Informes extends CI_Controller {
     return $datos_informe;
   }
 
-
   function obtener_fecha_vencimiento($array,$data) {
     if ($data->tiene_vencimiento == '1') {
       // El attr vence
@@ -328,15 +328,6 @@ class Informes extends CI_Controller {
     }
     $array[$data->atributo_id] = $dato;
     return $array;
-  }
-
-  function test_informe(){
-    $fecha_inicio = '2021-09-01';
-    $fecha_fin = '2021-09-30';
-    $atributos_ids = array(33);
-    $info = $this->Atributos_Vehiculos_model->informe_matriz( $fecha_inicio, $fecha_fin, $atributos_ids );
-    $str = $this->db->last_query();
-    echo json_encode($str);
   }
 
   function listado_personas() {
@@ -369,5 +360,4 @@ class Informes extends CI_Controller {
           $titulo_columna, $nombres_indices, 'C' , 'listado_personal'
     );
   }
-
 }
