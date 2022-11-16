@@ -270,6 +270,7 @@ class Informes extends CI_Controller {
       } elseif ( $id_anterior != $data[$i]->id ) {
         $datos_informe[] = $row;
         $id_anterior = $data[$i]->id;
+        $row = $cuerpo_array;
         $row['interno'] = $data[$i]->interno;
         $row = $this->obtener_fecha_vencimiento($row, $data[$i]);
       } else {
