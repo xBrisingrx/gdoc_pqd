@@ -70,4 +70,11 @@ class DButil_model extends CI_Model {
     return ( $query->num_rows() > 0 );
   }
 
+  function get_with_select( $table, $attributes) {
+    $this->db->select($attributes)
+      ->from($table)
+        ->where('activo', true);
+    return $this->db->get()->result();
+  }
+
 }

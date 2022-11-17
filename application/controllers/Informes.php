@@ -212,7 +212,7 @@ class Informes extends CI_Controller {
     $this->generar_excel(
           $this->atributos_personas($fecha_inicio, $fecha_fin, $atributo_ids),
           'K', $numero_columnas,  $titulo_excel,'Informe_matriz',
-          $titulo_columna, $nombres_indices, 'C' , 'informe_matriz_personal'
+          $titulo_columna, $nombres_indices, 'C' , 'vencimiento_personal'
     );
   }
 
@@ -238,12 +238,19 @@ class Informes extends CI_Controller {
       array_push($titulo_columna, $atributo->nombre);
       array_push($nombres_indices, $atributo->id);
     }
-    $numero_columnas = count($nombres_indices);
+    // agregamos seguros
+    $aseguradoras = $this->DButil->get_with_select('aseguradoras', 'id, nombre');
+    
+    foreach ($aseguradoras as $aseguradora) {
+      array_push($titulo_columna, $aseguradora->nombre);
+      array_push($nombres_indices, "aseguradora_$aseguradora->id");
+    }
 
+    $numero_columnas = count($nombres_indices);
     $this->generar_excel(
           $this->atributos_vehiculos($fecha_inicio, $fecha_fin, $atributo_ids),
           'K', $numero_columnas,  $titulo_excel,'Informe_matriz',
-          $titulo_columna, $nombres_indices, 'B' , 'informe_matriz_vehiculos'
+          $titulo_columna, $nombres_indices, 'B' , 'vencimientos_vehiculos'
     );
   }
 
@@ -260,6 +267,14 @@ class Informes extends CI_Controller {
     foreach ($atributos as $atributo) {
       $cuerpo_array[$atributo->id] = "---";
     }
+
+    $aseguradoras = $this->DButil->get_with_select('aseguradoras', 'id, nombre');
+    foreach ($aseguradoras as $aseguradora) {
+      $cuerpo_array["aseguradora_$aseguradora->id"] = "---";
+    }
+
+    $seguros_vehiculos = $this->Seguros_Vehiculos_model->get_vencimientos();
+
     $row = $cuerpo_array;
     $row['interno'] = 'No hay informacion para mostrar';
     for ($i=0; $i < count($data); $i++) {
@@ -279,7 +294,15 @@ class Informes extends CI_Controller {
     }
     $datos_informe[] = $row;
 
+    $this->cargar_seguros( $datos_informe );
+
     return $datos_informe;
+  }
+
+  function cargar_seguros($datos_informe) {
+    // sumamos al array que tenemos armado los seguros de vehiculos
+    $aseguradoras = $this->DButil->get_with_select('aseguradoras', 'id, nombre');
+
   }
 
   function atributos_personas( $fecha_inicio = null, $fecha_fin = null, $atributo_ids = null) {
