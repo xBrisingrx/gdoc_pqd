@@ -11,7 +11,7 @@ class Seguros_Vehiculos_model extends CI_Model {
   }
 
   function get_seguros_vehiculo($vehiculo_id){
-    $this->db->select('vehiculos.id as vehiculo_id, sv.id, aseguradoras.nombre, sv.poliza, sv.fecha_alta, sv.vencimiento')
+    $this->db->select('vehiculos.id as vehiculo_id, sv.id, sv.aseguradora_id,aseguradoras.nombre, sv.poliza, sv.fecha_alta, sv.vencimiento')
               ->from("$this->table AS sv")
                 ->join('vehiculos', 'vehiculos.id = sv.vehiculo_id')
                 ->join('aseguradoras', 'aseguradoras.id = sv.aseguradora_id')

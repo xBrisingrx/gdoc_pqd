@@ -16,6 +16,7 @@ class Informes extends CI_Controller {
     $this->load->model('Atributos_Vehiculos_model');
     $this->load->model('Perfil_model');
     $this->load->model('Empresa_model');
+    $this->load->model('Seguros_Vehiculos_model');
     date_default_timezone_set('America/Argentina/Buenos_Aires');
     if ( empty( $this->session->nombre_usuario ) ) {
       redirect('Login');
@@ -273,7 +274,7 @@ class Informes extends CI_Controller {
       $cuerpo_array["aseguradora_$aseguradora->id"] = "---";
     }
 
-    $seguros_vehiculos = $this->Seguros_Vehiculos_model->get_vencimientos();
+    // $seguros_vehiculos = $this->Seguros_Vehiculos_model->get_vencimientos();
 
     $row = $cuerpo_array;
     $row['interno'] = 'No hay informacion para mostrar';
@@ -282,7 +283,12 @@ class Informes extends CI_Controller {
         $id_anterior = $data[$i]->id;
         $row['interno'] = $data[$i]->interno;
         $row = $this->obtener_fecha_vencimiento($row, $data[$i]);
+        // Agregamos los seguros al primer registro , este se repite x las dudas
+        // ese registro tenga un solo vencimiento
+        $this->cargar_seguros( $row, $data[$i] );
       } elseif ( $id_anterior != $data[$i]->id ) {
+        // antes de cambiar de vehiculo le cargamos los vencimientos de seguros
+        $this->cargar_seguros( $row, $data[$i] );
         $datos_informe[] = $row;
         $id_anterior = $data[$i]->id;
         $row = $cuerpo_array;
@@ -294,15 +300,25 @@ class Informes extends CI_Controller {
     }
     $datos_informe[] = $row;
 
-    $this->cargar_seguros( $datos_informe );
-
     return $datos_informe;
   }
 
-  function cargar_seguros($datos_informe) {
-    // sumamos al array que tenemos armado los seguros de vehiculos
-    $aseguradoras = $this->DButil->get_with_select('aseguradoras', 'id, nombre');
+  function cargar_seguros( $row, $data ) {
+    // row es la fila que se suma a la matriz
+    // en data viene la info del vehiculo
 
+    // sumamos al array que tenemos armado los seguros de vehiculos
+    $vencimientos = $this->Seguros_Vehiculos_model->get_seguros_vehiculo($data->id);
+    // echo json_encode($vencimientos);
+    foreach ($vencimientos as $v) {
+      echo json_encode("un each de $v->id");
+      $row["aseguradora_$v->aseguradora_id"] = date('d-m-Y', strtotime($v->vencimiento));
+    }
+
+  }
+
+  function test_seguro(){
+    echo json_encode($this->Seguros_Vehiculos_model->get_seguros_vehiculo($data->id));
   }
 
   function atributos_personas( $fecha_inicio = null, $fecha_fin = null, $atributo_ids = null) {
