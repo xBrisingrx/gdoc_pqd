@@ -281,18 +281,13 @@ class Informes extends CI_Controller {
         $id_anterior = $data[$i]->id;
         $row['interno'] = $data[$i]->interno;
         $row = $this->obtener_fecha_vencimiento($row, $data[$i]);
-        // Agregamos los seguros al primer registro , este se repite x las dudas
-        // ese registro tenga un solo vencimiento
-        $vencimientos = $this->Seguros_Vehiculos_model->get_seguros_vehiculo($data[$i]->id);
-        foreach ($vencimientos as $v) {
-          $row["aseguradora_$v->aseguradora_id"] = date('d-m-Y', strtotime($v->vencimiento));
-        }
       } elseif ( $id_anterior != $data[$i]->id ) {
         // antes de cambiar de vehiculo le cargamos los vencimientos de seguros
-        $vencimientos = $this->Seguros_Vehiculos_model->get_seguros_vehiculo($data[$i]->id);
+        $vencimientos = $this->Seguros_Vehiculos_model->get_seguros_vehiculo($id_anterior);
         foreach ($vencimientos as $v) {
           $row["aseguradora_$v->aseguradora_id"] = date('d-m-Y', strtotime($v->vencimiento));
         }
+        // echo json_encode($row);
         $datos_informe[] = $row;
         $id_anterior = $data[$i]->id;
         $row = $cuerpo_array;
@@ -301,6 +296,11 @@ class Informes extends CI_Controller {
       } else {
         $row = $this->obtener_fecha_vencimiento($row, $data[$i]);
       }
+    }
+    // cargo los seguros del ultimo registro
+    $vencimientos = $this->Seguros_Vehiculos_model->get_seguros_vehiculo($id_anterior);
+    foreach ($vencimientos as $v) {
+      $row["aseguradora_$v->aseguradora_id"] = date('d-m-Y', strtotime($v->vencimiento));
     }
     $datos_informe[] = $row;
 

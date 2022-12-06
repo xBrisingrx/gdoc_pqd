@@ -19,3 +19,27 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+
+    /var/w/h/s/gdoc_pqd    main ⇣3 !25 ?7  sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/vsftpd.pem -out /etc/ssl/private/vsftpd.pem
+Can't load /home/mssi/.rnd into RNG
+140018521952704:error:2406F079:random number generator:RAND_load_file:Cannot open file:../crypto/rand/randfile.c:88:Filename=/home/mssi/.rnd
+Generating a RSA private key
+...............+++++
+................................+++++
+writing new private key to '/etc/ssl/private/vsftpd.pem'
+-----
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter '.', the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:AR
+State or Province Name (full name) [Some-State]:Chubut
+Locality Name (eg, city) []:Comodoro
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:MSSI
+Organizational Unit Name (eg, section) []:Dev
+Common Name (e.g. server FQDN or YOUR name) []:Mauro
+Email Address []:soporte@maurosampaoli.com.ar
