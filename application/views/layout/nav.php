@@ -73,6 +73,9 @@
                     <li>
                       <a href="<?php echo base_url('Motivos_baja/administrar/1');?>">Admin motivos baja</a>
                     </li>
+                    <li>
+                      <a href="<?php echo base_url('Entrega_ropa');?>">Entrega de ropa</a>
+                    </li>
                     <!-- <li>
                       <a href="<?php echo base_url('Personas/vacaciones');?>">Vacaciones</a>
                     </li> -->
