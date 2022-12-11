@@ -6,12 +6,18 @@ class Periodo_entrega_ropa_model extends CI_Model {
 
   public function __construct() {
     parent::__construct();
+    
   }
 
   
   
-  function get_periodo_ropa($attr = null, $valor = null) {
-  	$this->db->select('')
+  function get_periodo_ropa($periodo_entrega_id) {
+  	$this->db->select('ropa.nombre as nombre_ropa')
+      ->from($this->table)
+        ->join('ropa', 'periodo_entrega_ropa.ropa_id = ropa.id')
+          ->where('periodo_entrega_ropa.activo', true)
+          ->where('periodo_entrega_ropa.periodo_entrega_id', $periodo_entrega_id)
+    return $this->db->get()->result();
   }
 
   public function insert_entry($empresa) {

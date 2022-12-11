@@ -7,6 +7,7 @@ class Periodo_entregas extends CI_Controller {
 
 	function __construct() {
 	  parent::__construct();
+	  $this->load->model('Periodo_entrega_ropa_model');
 	  date_default_timezone_set('America/Argentina/Buenos_Aires');
 	}
 
@@ -18,16 +19,16 @@ class Periodo_entregas extends CI_Controller {
 		$this->load->view('layout/footer');
 	}
 
-	function list(){
+	function list() {
 		$periodo_entregas = $this->DButil->get('periodo_entregas', array('activo' => true) );
 		$data = array();
 		foreach ($periodo_entregas as $a) {
 			$row = array();
 			$row[] = $a->nombre;
-			$row[] = $a->periodo;
+			$row[] = $a->duracion;
 			$row[] = $a->descripcion;
 			if ($this->session->userdata('rol') == 1) {
-				$row[] = '<button class="btn btn-sm u-btn-primary mr-2" title="Editar" onclick="modal_edit_periodo_entrega('."'".$a->id."'".')" ><i class="fa fa-edit"></i></button> <button class="btn btn-sm u-btn-red " title="Eliminar" onclick="modal_destroy_periodo_entrega('."'".$a->id."'".')" ><i class="fa fa-trash-o"></i></button>';
+				$row[] = '<button class="btn btn-sm u-btn-blue mr-2" title="Agregar prenda" onclick="modal_add_prenda('."'".$a->id."'".')" ><i class="fa fa-plus"></i></button> <button class="btn btn-sm u-btn-purple mr-2" title="Ver prendas" onclick="modal_show_prenda('."'".$a->id."'".')" ><i class="fa fa-eye"></i></button>';
 			} else {
 				$row[] = '';
 			}

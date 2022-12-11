@@ -9,12 +9,12 @@
 	    Packs de ropa
 	  </h3>
 	  <div class="px-2 pb-2">
-	  	<table id="tabla_periodo_entrega_ropa" class="table table-hover dt-responsive w-100 u-table--v1 mb-0">
+	  	<table id="tabla_periodos" class="table table-hover dt-responsive w-100 u-table--v1 mb-0">
 	      <thead>
 	        <tr>
 	          <th>Nombre</th>
 	          <th>Periodo</th>
-	          <th>Items</th>
+	          <th>Descripcion</th>
 	          <th>Acciones</th>
 	        </tr>
 	      </thead>
@@ -125,6 +125,22 @@
 		return datos
 	}
 
+	function modal_show_prenda(id) {
+		$.ajax({
+			url: '<?php echo base_url("Periodo_entrega_ropa/list/")?>' + id,
+			type: 'GET',
+			dataType: 'JSON',
+			success: function(response){
+				if (response.status === 'success') {
+					console.log(response)
+				} 
+			},
+			error: function(response){
+				noty_alert( 'error' , 'No se pudo guardar la información' )
+			}
+		})
+	}
+
 	$(document).on('ready', function () {
 
 		form_periodo.validate({
@@ -143,6 +159,11 @@
 			if ( form_periodo.valid() ) {
 				save_periodo()
 			}
+		})
+
+		tabla_periodos = $('#tabla_periodos').DataTable({
+										ajax: '<?php echo base_url("periodo_entregas/list/");?>',
+										language: { url: "<?php echo base_url('assets/vendor/datatables/spanish.json');?>" }
 		})
 	
   })
