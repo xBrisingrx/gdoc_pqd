@@ -8,20 +8,22 @@ class Periodo_entrega_ropa_model extends CI_Model {
     parent::__construct();
     
   }
-
-  
   
   function get_periodo_ropa($periodo_entrega_id) {
   	$this->db->select('ropa.nombre as nombre_ropa')
       ->from($this->table)
         ->join('ropa', 'periodo_entrega_ropa.ropa_id = ropa.id')
           ->where('periodo_entrega_ropa.activo', true)
-          ->where('periodo_entrega_ropa.periodo_entrega_id', $periodo_entrega_id)
+          ->where('periodo_entrega_ropa.periodo_entrega_id', $periodo_entrega_id);
     return $this->db->get()->result();
   }
 
-  public function insert_entry($empresa) {
-  	return $this->db->insert($this->table, $empresa);
+  function insert_entry($entry) {
+    if (!$this->existe( $entry )) {
+      return $this->db->insert($this->table, $entry);
+    } else {
+      return false;
+    }
   }
 
   public function update_entry($id, $empresa) {
@@ -46,5 +48,25 @@ class Periodo_entrega_ropa_model extends CI_Model {
     $this->db->where('id', $id);
     return $this->db->update($this->table, $entry);
   } 
+
+  function existe( $entry, $entry_id = null ) {
+    $this->db->select('id, activo')
+                ->from($this->table)
+                  ->where('periodo_entrega_id', $entry['periodo_entrega_id'])
+                  ->where('ropa_id', $entry['ropa_id']);
+    if ($entry_id != null) {
+      $this->db->where('id !=', $entry_id);
+    }
+    $query = $this->db->get();
+    return ( $query->num_rows() > 0 );
+  }
+
+  function get_ropa($id) {
+    $this->db->select('ropa.nombre')
+                ->from($this->table)
+                  ->join('ropa', $this->table.'.ropa_id = ropa.id')
+                    ->where($this->table.'.periodo_entrega_id', $id);
+    return $this->db->get();
+  }
 
 }

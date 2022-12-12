@@ -8,13 +8,17 @@ class Entrega_ropa extends CI_Controller {
 	function __construct() {
 	  parent::__construct();
 	  date_default_timezone_set('America/Argentina/Buenos_Aires');
+	  if ( empty( $this->session->nombre_usuario ) ) {
+      redirect('Login');
+    }
 	}
 
 	function index(){
 		$title['title'] = 'Ropa';
+		$data['ropa'] = $this->DButil->get('ropa', array('activo'=> true));
 		$this->load->view('layout/header',$title);
 		$this->load->view('layout/nav');
-		$this->load->view('sistema/entrega_ropa/index');
+		$this->load->view('sistema/entrega_ropa/index', $data);
 		$this->load->view('layout/footer');
 	}
 

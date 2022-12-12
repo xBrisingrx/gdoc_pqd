@@ -4,6 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Periodo_entregas extends CI_Controller {
 
 	// Agrupamos la ropa que se entrega por periodos
+	// usamos como categoria el pack de ropa
 
 	function __construct() {
 	  parent::__construct();
@@ -28,7 +29,7 @@ class Periodo_entregas extends CI_Controller {
 			$row[] = $a->duracion;
 			$row[] = $a->descripcion;
 			if ($this->session->userdata('rol') == 1) {
-				$row[] = '<button class="btn btn-sm u-btn-blue mr-2" title="Agregar prenda" onclick="modal_add_prenda('."'".$a->id."'".')" ><i class="fa fa-plus"></i></button> <button class="btn btn-sm u-btn-purple mr-2" title="Ver prendas" onclick="modal_show_prenda('."'".$a->id."'".')" ><i class="fa fa-eye"></i></button>';
+				$row[] = '<button class="btn btn-sm u-btn-blue mr-2" title="Agregar prenda" onclick="modal_add_prenda('."'".$a->id."'".')" ><i class="fa fa-plus"></i></button> <button type="button" class="btn btn-sm u-btn-purple mr-2" title="Ver prendas" onclick="modal_show_prenda('."'".$a->id."'".')" ><i class="fa fa-eye"></i></button>';
 			} else {
 				$row[] = '';
 			}
@@ -43,24 +44,35 @@ class Periodo_entregas extends CI_Controller {
 			echo json_encode(array('status' => 'error', 'msg' => validation_errors() )); 
 		} else {
 			if ( !$this->existe( $this->input->post('nombre') )  ) {
-				$entry = array(
-					'nombre' => $this->input->post('nombre'),
-					'duracion' => $this->input->post('duracion'),
-					'descripcion' => $this->input->post('descripcion'),
-					'created_at' => date('Y-m-d H:i:s'),
-	        'updated_at' => date('Y-m-d H:i:s'),
-	        'user_created_id' => $this->session->userdata('id'),
-	        'user_last_updated_id' => $this->session->userdata('id')
-				);
-				$entry = $this->security->xss_clean($entry);
-				if ($this->DButil->insert_entry('periodo_entregas', $entry)) {
-					 echo json_encode(array('status' => 'success', 'msg' => 'Registro exitoso' )); 
+				$this->db->trans_begin();
+					$entry = array(
+						'nombre' => $this->input->post('nombre'),
+						'duracion' => $this->input->post('duracion'),
+						'descripcion' => $this->input->post('descripcion'),
+						'created_at' => date('Y-m-d H:i:s'),
+		        'updated_at' => date('Y-m-d H:i:s'),
+		        'user_created_id' => $this->session->userdata('id'),
+		        'user_last_updated_id' => $this->session->userdata('id')
+					);
+					$entry = $this->security->xss_clean($entry);
+					if ($this->DButil->insert_entry('periodo_entregas', $entry)) {
+						if ( $this->input->post('ropa')[0] != '' ) {
+							$ropa_ids = explode( ',' , $this->input->post('ropa')[0] );
+							$periodo_entrega_id = $this->DButil->get_last_id('periodo_entregas');
+							$this->add_ropa($periodo_entrega_id, $ropa_ids);
+						}
+					}
+					if ( ($this->db->trans_status() === FALSE) ) {
+		        $this->db->trans_rollback();
+		        echo json_encode(array('status' => 'error', 'msg' => 'Error al crear el pack' )); 
+		      }
+		      else {
+		        $this->db->trans_commit();
+		        echo json_encode(array('status' => 'success', 'msg' => 'Registro exitoso' ));
+		      }
 				} else {
-					echo json_encode(array('status' => 'error', 'msg' => 'Error al crear aseguradora' )); 
+					echo json_encode(array('status' => 'existe', 'msg' => 'Ya hay un pack con este nombre' )); 
 				}
-			} else {
-				echo json_encode(array('status' => 'existe', 'msg' => 'Esta aseguradora ya se encuentra registrada' )); 
-			}
 		}
 	}
 
@@ -113,6 +125,32 @@ class Periodo_entregas extends CI_Controller {
 
 	function existe($nombre, $id = null ){
 		return $this->DButil->existe('periodo_entregas', 'nombre', $nombre, $id);
+	}
+
+	function add_ropa($periodo_entrega_id, $ropa_ids) {
+		foreach($ropa_ids as $ropa_id) {
+			$entry = array(
+				'ropa_id' => $ropa_id,
+				'periodo_entrega_id' => $periodo_entrega_id,
+				'created_at' => date('Y-m-d H:i:s'),
+        'updated_at' => date('Y-m-d H:i:s'),
+        'user_created_id' => $this->session->userdata('id'),
+        'user_last_updated_id' => $this->session->userdata('id')
+			);
+			$this->Periodo_entrega_ropa_model->insert_entry($entry);
+		}
+	}
+
+	function get_ropa($periodo_entrega_ropa_id) {
+		$ropa = $this->Periodo_entrega_ropa_model->get_ropa($periodo_entrega_ropa_id);
+		echo json_encode($ropa);
+		$data = array();
+		foreach ($ropa as $r) {
+			$row = array();
+			$row[] = $r->nombre;
+			$data[] = $row;
+		}
+		echo json_encode(array("data" => $data));
 	}
 
 }

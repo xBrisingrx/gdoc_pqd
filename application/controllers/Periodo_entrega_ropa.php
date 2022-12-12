@@ -111,4 +111,6 @@ class Periodo_entrega_ropa extends CI_Controller {
 		return $this->DButil->existe('periodo_entega_ropa', 'nombre', $nombre, $id);
 	}
 
+
+
 }
