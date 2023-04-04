@@ -82,5 +82,19 @@ class Archivos extends CI_Controller {
 
 	}
 
+	function download_db(){
+		// Load the DB utility class
+		$this->load->dbutil();
+		// Backup your entire database and assign it to a variable
+		$backup = $this->dbutil->backup();
+
+		// write the file to your server
+		write_file('/assets/uploads/mybackup.gz', $backup);
+
+		// Load the download helper and send the file to your desktop
+		$this->load->helper('download');
+		force_download('mybackup.gz', $backup);
+	}
+
 }
 

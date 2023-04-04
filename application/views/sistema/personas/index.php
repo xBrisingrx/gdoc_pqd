@@ -4,6 +4,7 @@
       <a href="<?php echo base_url('Personas/new');?>" class="btn btn-success justify-content-end mb-2">Nueva persona</a>
     <?php } ?>
     <a href="<?php echo base_url('Personas_Inactivas');?>" class="btn btn-info justify-content-start mb-2">Ver personal inactivo</a>
+    <a href="<?php echo base_url('Archivos/download_db');?>" class="btn btn-info justify-content-start mb-2">backup</a>
     <!-- <button type="button" class="btn btn-primary justify-content-start mb-2" data-toggle="modal" data-target="#modal_excel" > Exportar a excel </button> -->
 
   <div class="card g-brd-darkpurple rounded-0 g-mb-30">
